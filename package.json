@@ -9,6 +9,7 @@
         "build:libs": "npm run build -w packages/core -w packages/api"
     },
     "devDependencies": {
+        "7zip-bin": "^5.2.0",
         "concurrently": "^8.0.1"
     }
 }
