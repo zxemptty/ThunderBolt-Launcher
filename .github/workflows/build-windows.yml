@@ -25,15 +25,20 @@ jobs:
     - name: Install dependencies
       run: |
         npm install
+        
+    - name: Build libraries
+      run: |
+        npm run build:libs
+        
+    - name: Install launcher dependencies
+      run: |
         cd packages/launcher
         npm install
         
     - name: Build launcher
       run: |
         cd packages/launcher
-        npm run build:main
-        npm run build:preload
-        npm run build:renderer
+        npm run build
         
     - name: Build Windows exe
       run: |
