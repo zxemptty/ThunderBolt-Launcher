@@ -1,0 +1,48 @@
+name: Build Windows Launcher
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'packages/launcher/**'
+      - '.github/workflows/build-windows.yml'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        cd packages/launcher
+        npm install
+        
+    - name: Build launcher
+      run: |
+        cd packages/launcher
+        npm run build
+        
+    - name: Build Windows exe
+      run: |
+        cd packages/launcher
+        npm run release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ThunderBolt-Launcher-Windows
+        path: packages/launcher/out/*.exe
+        retention-days: 30
